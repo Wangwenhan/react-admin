@@ -60,7 +60,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
-  "proxyTable": {
+  "proxy": {
     "/bomb": {
       "target": "http: //47.96.170.93/",
       "changeOrigin": true,

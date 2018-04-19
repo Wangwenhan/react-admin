@@ -161,6 +161,12 @@ module.exports = {
           },
           {
             test: /\.scss$/,
+            exclude: path.resolve(__dirname, '../src/styles'),
+            loaders: ['style-loader', 'css-loader?modules&localIdentName=[local]-[hash:base64:8]', 'sass-loader']
+          },
+          {
+            test: /\.scss$/,
+            include: path.resolve(__dirname, '../src/styles'),
             loaders: ['style-loader', 'css-loader', 'sass-loader']
           },
           // The notation here is somewhat confusing.

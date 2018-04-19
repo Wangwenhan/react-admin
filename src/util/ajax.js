@@ -1,3 +1,8 @@
+/**
+ * 封装axios 添加拦截器
+ * @author Wangwenhan <nj.wangwenhan@gmail.com>
+ */
+
 import axios from 'axios'
 import { getLocalStore, getSessionStore, removeSessionStore, removeLocalStore } from 'utils/storage'
 

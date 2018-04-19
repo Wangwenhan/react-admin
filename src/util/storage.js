@@ -1,4 +1,9 @@
 /**
+ * storage的增删改查
+ * @author Wangwenhan <nj.wangwenhan@gmail.com>
+ */
+
+/**
  * 存储sessionStorage
  */
 export const setSessionStore = (name, content) => {
