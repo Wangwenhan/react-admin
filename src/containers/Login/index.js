@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import styles from './index.scss'
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { Link } from "react-router-dom";
 const FormItem = Form.Item;
 
 class NormalLoginForm extends Component {
-  handleSubmit = (e) => {
+  handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
@@ -18,7 +19,7 @@ class NormalLoginForm extends Component {
     return (
       <div className={`${styles.container} login-page-wrapper`}>
         <div className={styles['login-form-content']}>
-          <Form onSubmit={this.handleSubmit} className={styles['login-form']}>
+          <Form onSubmit={this.handleSubmit.bind(this)} className={styles['login-form']}>
             <FormItem>
               {getFieldDecorator('userName', {
                 rules: [{ required: true, message: 'Please input your username!' }],
@@ -49,9 +50,16 @@ class NormalLoginForm extends Component {
             </FormItem>
           </Form>
         </div>
+        <div className={styles.copy_right}>
+          <span>powered by wwh</span>
+        </div>
       </div>
     );
   }
+}
+
+NormalLoginForm.propTypes = {
+  form: PropTypes.object.isRequired
 }
 
 const WrappedNormalLoginForm = Form.create()(NormalLoginForm);

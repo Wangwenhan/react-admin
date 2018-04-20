@@ -1,3 +1,4 @@
+@import './../../styles/mixin.scss';
 .container {
     width: 100vw;
     background: url('./../../assets/login/login_bg.png');
@@ -5,9 +6,11 @@
     height: 100vh;
     position: relative;
     .login-form-content {
-        position: absolute;
-        top: 30vh;
-        right: 15vw;
+        @include position(absolute,
+        30vh,
+        15vw,
+        auto,
+        auto);
         background: #fff;
         padding: 39px 15px 10px;
         border-radius: 3px;
@@ -20,5 +23,15 @@
         .login-form-button {
             width: 100%;
         }
+    }
+    .copy_right {
+        @include position(fixed,
+        auto,
+        0,
+        0,
+        0);
+        text-align: center;
+        font-size: 16px;
+        font-weight: 700;
     }
 }
