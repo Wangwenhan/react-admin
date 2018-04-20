@@ -14,9 +14,7 @@ import Login from './containers/Login'
 import NoMatch from './containers/404'
 // import registerServiceWorker from './registerServiceWorker';
 
-
 const supportsHistory = 'pushState' in window.history
-
 render(
   <Provider store={store}>
     <LocaleProvider locale={zh_CN}>

@@ -11,11 +11,15 @@
     "ecmaVersion": 7,
     "sourceType": "module",
     "ecmaFeatures": {
-      "jsx": true
+      "jsx": true,
+      "experimentalObjectRestSpread": true
     }
   },
   "env": {
     "es6": true,
     "browser": true
+  },
+  "globals": {
+    "process": true
   }
 }

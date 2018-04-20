@@ -4,7 +4,7 @@
  */
 
 import axios from 'axios'
-import { getLocalStore, getSessionStore, removeSessionStore, removeLocalStore } from 'utils/storage'
+import { removeSessionStore, removeLocalStore } from 'utils/storage'
 
 // create an axios instance
 const service = axios.create({

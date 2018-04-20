@@ -11,14 +11,14 @@
   },
   "proxy": {
     "/bomb": {
-      "target": "http: //47.96.170.93/",
+      "target": "http://47.96.170.93/",
       "changeOrigin": true,
       "secure": false,
       "pathRewrite": {
         "^/bomb": "/bomb"
       },
       "headers": {
-        "Referer": "http: //47.96.170.93/"
+        "Referer": "http://47.96.170.93/"
       }
     }
   },
