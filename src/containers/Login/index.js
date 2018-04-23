@@ -11,10 +11,19 @@ import { loginSystem } from 'api/user'
 import { setUserInfo as setUserInfoFromAction, clearUserInfo as clearUserInfoFromAction } from './../../actions/user'
 
 class NormalLoginForm extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      iconLoading: false
+    }
+  }
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.setState({
+          iconLoading: true
+        })
         // 采用cookie或者token需自己适配
         const formData = new FormData()
         const reg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
@@ -32,6 +41,9 @@ class NormalLoginForm extends Component {
           const redirect = decodeURIComponent(search.redirect || '/')
           this.props.history.push(redirect)
         }).catch(err => {
+          this.setState({
+            iconLoading: false
+          })
           // 登录失败 请客用户信息（有可能用户在登录状态下重新登录其他账号）
           this.props.clearUserInfo()
           console.error(err.message)
@@ -70,7 +82,7 @@ class NormalLoginForm extends Component {
               <Link to="/modify" className={styles.login_form_forgot}>
                 忘记密码
                </Link>
-              <Button type="primary" htmlType="submit" className={styles.login_form_button}>
+              <Button type="primary" htmlType="submit" loading={this.state.iconLoading} className={styles.login_form_button}>
                 登录
           </Button>
             </FormItem>

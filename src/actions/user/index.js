@@ -10,6 +10,12 @@ export const clearUserInfo = () => ({
   type: CLEAR_USER_INFO
 })
 
+export function fedLogout() {
+  return dispatch => {
+    dispatch(clearUserInfo())
+  }
+}
+
 export function getUserInfo() {
   return dispatch => {
     getUserInfoApi().then(res => {

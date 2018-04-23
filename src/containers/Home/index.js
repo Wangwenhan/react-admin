@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { Layout, Spin } from 'antd';
 import styles from './index.scss'
 import Sidebar from './subpages/Sidebar'
-import Navbar from './subpages/Navbar'
 import AppMain from './subpages/AppMain'
+import Navbar from './subpages/Navbar';
 import { getLocalStore, setLocalStore } from 'utils/storage'
 import { toggleMenuCollapsed as toggleMenuCollapsedFromAction } from 'actions/app'
 import { getUserInfo as getUserInfoFromAction, clearUserInfo as clearUserInfoFromAction } from 'actions/user'
@@ -78,7 +78,7 @@ class Home extends Component {
       <Layout className={styles.home_wrapper}>
         <Sidebar collapsed={this.props.collapsed}></Sidebar>
         <Layout>
-          <Navbar collapsed={this.props.collapsed} toggle={this.toggle.bind(this)}></Navbar>
+          <Navbar collapsed={this.props.collapsed} userInfo={this.props.userInfo} toggle={this.toggle.bind(this)}></Navbar>
           <AppMain></AppMain>
         </Layout>
       </Layout>

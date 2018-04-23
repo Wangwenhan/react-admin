@@ -1,10 +1,28 @@
-.trigger {
-    font-size: 18px;
-    line-height: 64px;
-    padding: 0 24px;
-    cursor: pointer;
-    transition: color .3s;
-    &:hover {
-        color: #1890ff;
+.navbar_container {
+    background: #fff;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    .trigger {
+        font-size: 18px;
+        line-height: 64px;
+        padding: 0 24px;
+        cursor: pointer;
+        transition: color .3s;
+        &:hover {
+            color: #1890ff;
+        }
+    }
+    .right_option {
+        padding: 0 24px;
+        font-size: 14px;
+        line-height: 64px;
+        .avatar_wrapper {
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 64px;
+        }
     }
 }
