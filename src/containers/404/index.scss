@@ -1,19 +1,19 @@
-.not-found-content {
+.not_found_content {
     background: #f0f2f5;
     height: 100vh;
     display: flex;
     justify-content: space-around;
-    .wscn-http404 {
+    .wscn_http404 {
         padding-top: 20vh;
-        .pic-404 {
+        .pic_404 {
             position: relative;
             float: left;
             width: 600px;
             overflow: hidden;
-            &__parent {
+            &_parent {
                 width: 100%;
             }
-            &__child_left {
+            &_child_left {
                 position: absolute;
                 width: 80px;
                 top: 17px;
@@ -25,7 +25,7 @@
                 animation-fill-mode: forwards;
                 animation-delay: 1s;
             }
-            &__child_mid {
+            &_child_mid {
                 position: absolute;
                 width: 46px;
                 top: 10px;
@@ -37,7 +37,7 @@
                 animation-fill-mode: forwards;
                 animation-delay: 1.2s;
             }
-            &__child_right {
+            &_child_right {
                 position: absolute;
                 width: 62px;
                 top: 100px;
@@ -121,7 +121,7 @@
             float: left;
             width: 300px;
             overflow: hidden;
-            &__oops {
+            &_oops {
                 font-size: 32px;
                 font-weight: bold;
                 line-height: 40px;
@@ -132,7 +132,7 @@
                 animation-duration: 0.5s;
                 animation-fill-mode: forwards;
             }
-            &__headline {
+            &_headline {
                 font-size: 20px;
                 line-height: 24px;
                 color: #1482f0;
@@ -143,7 +143,7 @@
                 animation-delay: 0.1s;
                 animation-fill-mode: forwards;
             }
-            &__info {
+            &_info {
                 font-size: 13px;
                 line-height: 21px;
                 color: grey;
@@ -154,7 +154,7 @@
                 animation-delay: 0.2s;
                 animation-fill-mode: forwards;
             }
-            &__return-home {
+            &_return_home {
                 display: block;
                 float: left;
                 width: 110px;

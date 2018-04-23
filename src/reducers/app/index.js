@@ -1,13 +1,13 @@
 import { TOGGLE_MENU_COLLAPSED } from 'constants/app'
 
-const appInfo = {
+const appData = {
   isMenuCollapsed: false // 菜单栏是否收起
 }
 
-const app = (state = appInfo, action) => {
+const app = (state = appData, action) => {
   switch (action.type) {
     case TOGGLE_MENU_COLLAPSED:
-      return { ...appInfo, isMenuCollapsed: action.state }
+      return { ...appData, isMenuCollapsed: action.state }
     default:
       return state
   }

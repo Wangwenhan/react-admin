@@ -5,7 +5,7 @@
     min-height: 500px;
     height: 100vh;
     position: relative;
-    .login-form-content {
+    .login_form_content {
         @include position(absolute,
         30vh,
         15vw,
@@ -14,15 +14,23 @@
         background: #fff;
         padding: 39px 15px 10px;
         border-radius: 3px;
-        .login-form {
+        width: 300px;
+        .login_form {
             max-width: 300px;
         }
-        .login-form-forgot {
+        .login_form_forgot {
             float: right;
         }
-        .login-form-button {
+        .login_form_button {
             width: 100%;
         }
+    }
+    .logo_content {
+        @include position(fixed,
+        0,
+        auto,
+        auto,
+        0);
     }
     .copy_right {
         @include position(fixed,

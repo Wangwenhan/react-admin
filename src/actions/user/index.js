@@ -19,11 +19,3 @@ export function getUserInfo() {
     })
   }
 }
-
-// export function addCountAsync(state) {
-//   return dispatch => {
-//       setTimeout( () => {
-//           dispatch(toggleMenuCollapsed(state))
-//        },2000)
-//    }
-// }

@@ -6,3 +6,11 @@ export function getUserInfo() {
     method: 'get'
   })
 }
+
+export function loginSystem(data) {
+  return axios({
+    url: `/bomb/users/login`,
+    method: 'post',
+    data
+  })
+}

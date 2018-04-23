@@ -1,11 +1,15 @@
-import { SET_USER_INFO } from './../../constants/user'
+import { SET_USER_INFO, CLEAR_USER_INFO } from './../../constants/user'
 
-const userInfo = {}
+const userData = {
+  userInfo: {}
+}
 
-const user = (state = userInfo, action) => {
+const user = (state = userData, action) => {
   switch (action.type) {
     case SET_USER_INFO:
-      return { ...state, ...action.data }
+      return { ...state, ...{ userInfo: action.data } }
+    case CLEAR_USER_INFO:
+      return { ...state, ...{ userInfo: {} } }
     default:
       return state
   }
