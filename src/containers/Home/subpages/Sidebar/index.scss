@@ -26,5 +26,8 @@
     }
     .menu {
         padding: 16px 0;
+        :global(.svg-icon) {
+            margin-right: 10px;
+        }
     }
 }

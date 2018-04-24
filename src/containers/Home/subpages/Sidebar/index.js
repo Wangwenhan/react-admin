@@ -1,23 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import styles from './index.scss'
-import { Layout, Menu, Icon } from 'antd';
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+import _ from 'lodash'
+import { Layout, Menu, Spin } from 'antd';
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 import logoPng from 'assets/layout/sidebarLogo.png'
+import IconSvg from 'components/IconSvg'
+// 取得假数据 可根据需求调整为服务端获取或静态配置
+import { menuData } from './../../../../config/menuMock'
+
 class Sidebar extends Component {
   constructor(props) {
     super(props)
     // submenu keys of first level
-    this.rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
     this.state = {
-      openKeys: ['sub1'],
+      currentMenu: ['dashboard'],
+      openKeys: ['table', 'table1'],
     };
   }
   onOpenChange(openKeys) {
     const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
-    if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+    if (menuData.findIndex(item => {
+      return item.path === latestOpenKey
+    }) === -1) {
       this.setState({ openKeys });
     } else {
       this.setState({
@@ -25,11 +32,50 @@ class Sidebar extends Component {
       });
     }
   }
+  getMenu(menuData, basePath) {
+    if (_.isEmpty(menuData)) {
+      return []
+    }
+    return menuData.map(item => {
+      if (!item.name) {
+        return null
+      }
+      let icon = <IconSvg iconClass={item.icon} className={styles.sidebar_icon} />
+      if (item.children && !_.isEmpty(item.children)) {
+        return item.hideInMenu ? null :
+          (
+            <SubMenu title={
+              <span>
+                {icon}
+                <span>{item.name}</span>
+              </span>
+            }
+              key={item.key || item.path}
+            >
+              {this.getMenu(item.children, `${basePath + item.path}/`)}
+            </SubMenu>
+          )
+      }
+      return item.hideInMenu ? null :
+        (
+          <Menu.Item key={item.key || item.path}>
+            <Link
+              to={`/home/${basePath + item.path}`}
+              replace={`/home/${basePath + item.path}` === this.props.location.pathname}
+            >
+              {icon}
+              <span>{item.name}</span>
+            </Link>
+          </Menu.Item>
+        )
+    })
+  }
   render() {
     const menuProps = this.props.collapsed ? {} : {
       openKeys: this.state.openKeys,
       defaultOpenKeys: ['sub1']
     }
+    const selectedKeys = this.state.currentMenu
     return (
       <Sider
         trigger={null}
@@ -44,47 +90,28 @@ class Sidebar extends Component {
             <h1>React Admin</h1>
           </Link>
         </div>
-        <Menu
-          defaultSelectedKeys={['1']}
-          mode="inline"
-          theme="dark"
-          inlineCollapsed={this.props.collapsed}
-          onOpenChange={this.onOpenChange.bind(this)}
-          {...menuProps}
-          className={styles.menu}
-        >
-          <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
-            <Menu.Item key="1">Option 1</Menu.Item>
-            <Menu.Item key="2">Option 2</Menu.Item>
-            <Menu.Item key="3">Option 3</Menu.Item>
-            <Menu.Item key="4">Option 4</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub2" title={<span><Icon type="appstore" /><span>Navigation Two</span></span>}>
-            <Menu.Item key="5">Option 5</Menu.Item>
-            <Menu.Item key="6">Option 6</Menu.Item>
-            <SubMenu key="sub3" title="Submenu">
-              <Menu.Item key="7">Option 7</Menu.Item>
-              <Menu.Item key="8">Option 8</Menu.Item>
-            </SubMenu>
-          </SubMenu>
-          <SubMenu key="sub4" title={<span><Icon type="setting" /><span>Navigation Three</span></span>}>
-            <Menu.Item key="9">Option 9</Menu.Item>
-            <Menu.Item key="10">Option 10</Menu.Item>
-            <Menu.Item key="11">Option 11</Menu.Item>
-            <Menu.Item key="12">Option 12</Menu.Item>
-          </SubMenu>
-          <Menu.Item key="13">
-            <Icon type="pie-chart" />
-            <span>Option 1</span>
-          </Menu.Item>
-        </Menu>
+        {_.isEmpty(menuData) ?
+          <Spin size="large" style={{ marginTop: '30vh', width: '100%' }} />
+          : (<Menu
+            selectedKeys={selectedKeys}
+            mode="inline"
+            theme="dark"
+            inlineCollapsed={this.props.collapsed}
+            onOpenChange={this.onOpenChange.bind(this)}
+            {...menuProps}
+            className={styles.menu}
+          >
+            {this.getMenu(menuData, '')}
+          </Menu>)
+        }
       </Sider>
     );
   }
 }
 
 Sidebar.propTypes = {
-  collapsed: PropTypes.bool.isRequired
+  collapsed: PropTypes.bool.isRequired,
+  location: PropTypes.object.isRequired
 }
 
-export default Sidebar;
+export default withRouter(Sidebar);

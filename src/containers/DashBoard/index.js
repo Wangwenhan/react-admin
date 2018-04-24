@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // import styles from './index.scss'
-import IconSvg from './../../components/IconSvg'
+import IconSvg from 'components/IconSvg'
 
 class DashBoard extends Component {
   render() {
