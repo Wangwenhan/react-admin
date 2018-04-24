@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
-import './index.scss'
-import { Tabs, Button } from 'antd';
+import styles from './index.scss'
+import { Tabs, Button, Layout, Dropdown, Menu, Icon } from 'antd';
+const { Content } = Layout;
 const TabPane = Tabs.TabPane;
+import DashBoard from '../../../DashBoard'
 
 class AppMain extends Component {
   constructor(props) {
     super(props);
     this.newTabIndex = 0;
-    const panes = [
-      { title: 'Tab 1', content: 'Content of Tab Pane 1', key: '1' },
-      { title: 'Tab 2', content: 'Content of Tab Pane 2', key: '2' },
-    ];
     this.state = {
-      activeKey: panes[0].key,
-      panes,
+      activeKey: 'tab/dashboard/dashboard',
+      activeTitle: '',
+      panes: [
+        {
+          title: <span>DashBoard</span>,
+          content: <DashBoard />,
+          key: 'tab/dashboard/dashboard',
+          closable: false
+        }
+      ]
     };
   }
 
@@ -44,21 +50,40 @@ class AppMain extends Component {
     this.setState({ panes, activeKey });
   }
   render() {
+    const menu = (
+      <Menu>
+        <Menu.Item key='Tabs-CloseOthers'>关闭其他</Menu.Item>
+        <Menu.Item key='Tabs-CloseAll'>关闭所有</Menu.Item>
+      </Menu>
+    )
+    const operations = (
+      <Dropdown
+        type='ghost'
+        overlay={menu}
+        trigger={['click']}
+      >
+        <Button>
+          更多操作 <Icon type='down' />
+        </Button>
+      </Dropdown>
+    )
     return (
-      <div>
-        <div style={{ marginBottom: 16 }}>
-          <Button onClick={this.add.bind(this)}>ADD</Button>
-        </div>
+      <Content className={styles.app_main_wrapper}>
         <Tabs
+          type="editable-card"
           hideAdd
           onChange={this.onChange.bind(this)}
           activeKey={this.state.activeKey}
-          type="editable-card"
           onEdit={this.onEdit.bind(this)}
+          tabBarExtraContent={operations}
         >
-          {this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>{pane.content}</TabPane>)}
+          {this.state.panes.map(pane =>
+            <TabPane tab={pane.title} key={pane.key} closable={pane.closable}>
+              {pane.content}
+            </TabPane>)
+          }
         </Tabs>
-      </div>
+      </Content>
     );
   }
 }

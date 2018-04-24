@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import styles from './index.scss'
 import { Layout, Menu, Icon } from 'antd';
+import { Link } from 'react-router-dom'
 const { Sider } = Layout;
 const { SubMenu } = Menu;
-
+import logoPng from 'assets/layout/sidebarLogo.png'
 class Sidebar extends Component {
   constructor(props) {
     super(props)
@@ -34,8 +35,15 @@ class Sidebar extends Component {
         trigger={null}
         collapsible
         collapsed={this.props.collapsed}
+        className={styles.sidebar_wrapper}
+        width={256}
       >
-        <div className={styles.logo} />
+        <div className={styles.logo}>
+          <Link to="/">
+            <img src={logoPng} alt="logo" />
+            <h1>React Admin</h1>
+          </Link>
+        </div>
         <Menu
           defaultSelectedKeys={['1']}
           mode="inline"
@@ -43,6 +51,7 @@ class Sidebar extends Component {
           inlineCollapsed={this.props.collapsed}
           onOpenChange={this.onOpenChange.bind(this)}
           {...menuProps}
+          className={styles.menu}
         >
           <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
             <Menu.Item key="1">Option 1</Menu.Item>

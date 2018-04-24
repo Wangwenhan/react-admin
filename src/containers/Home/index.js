@@ -77,7 +77,7 @@ class Home extends Component {
     return (
       <Layout className={styles.home_wrapper}>
         <Sidebar collapsed={this.props.collapsed}></Sidebar>
-        <Layout>
+        <Layout className={styles.work_space}>
           <Navbar collapsed={this.props.collapsed} userInfo={this.props.userInfo} toggle={this.toggle.bind(this)}></Navbar>
           <AppMain></AppMain>
         </Layout>

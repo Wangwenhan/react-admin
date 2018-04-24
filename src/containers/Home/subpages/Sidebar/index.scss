@@ -1,5 +1,30 @@
-.logo {
-    height: 32px;
-    background: rgba(255, 255, 255, .2);
-    margin: 16px;
+.sidebar_wrapper {
+    box-shadow: 2px 0 6px rgba(0, 21, 41, .35);
+    width: 256px;
+    .logo {
+        height: 64px;
+        position: relative;
+        line-height: 64px;
+        padding-left: 24px;
+        transition: all 0.3s;
+        background: #002140;
+        overflow: hidden;
+        img {
+            display: inline-block;
+            vertical-align: middle;
+            height: 40px;
+        }
+        h1 {
+            color: white;
+            display: inline-block;
+            vertical-align: middle;
+            font-size: 20px;
+            margin: 0 0 0 12px;
+            font-weight: 600;
+            padding-left: 10px;
+        }
+    }
+    .menu {
+        padding: 16px 0;
+    }
 }

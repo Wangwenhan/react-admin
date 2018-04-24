@@ -8,10 +8,11 @@ import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 import { LocaleProvider } from 'antd'
 import zh_CN from 'antd/lib/locale-provider/zh_CN';
 import 'moment/locale/zh-cn';
-import {store} from './store'
+import { store } from './store'
 import Home from './containers/Home'
 import Login from './containers/Login'
 import NoMatch from './containers/404'
+import './icon'
 // import registerServiceWorker from './registerServiceWorker';
 
 const supportsHistory = 'pushState' in window.history

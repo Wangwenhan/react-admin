@@ -1,4 +1,9 @@
 .home_wrapper {
     min-height: 500px;
     height: 100vh;
+    .work_space {
+        &:global(.ant-layout) {
+            background: #fff;
+        }
+    }
 }

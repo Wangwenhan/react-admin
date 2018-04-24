@@ -6,7 +6,8 @@ import styles from './index.scss'
 import { Layout, Icon, Menu, Dropdown, Avatar } from 'antd';
 const { Header } = Layout;
 import userPng from 'assets/user/user.jpeg'
-import { fedLogout as fedLogoutFromAction } from './../../../../actions/user'
+import { fedLogout as fedLogoutFromAction } from 'actions/user'
+import ScreenFull from './../../../../components/ScreenFull'
 
 class Navbar extends Component {
   constructor(props) {
@@ -25,10 +26,10 @@ class Navbar extends Component {
   }
   render() {
     const menu = (
-      <Menu onClick={this.onMenuClick.bind(this)}>
-        <Menu.Item key="modify"><Icon type="key" />修改密码</Menu.Item>
+      <Menu className={styles.menu} onClick={this.onMenuClick.bind(this)}>
+        <Menu.Item key="modify"><Icon type="key" />&nbsp;修改密码</Menu.Item>
         <Menu.Divider />
-        <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
+        <Menu.Item key="logout"><Icon type="logout" />&nbsp;退出登录</Menu.Item>
       </Menu>
     )
     return (
@@ -39,6 +40,7 @@ class Navbar extends Component {
           onClick={this.props.toggle}
         />
         <div className={styles.right_option}>
+          <ScreenFull/>
           <Dropdown overlay={menu}>
             <a className={styles.avatar_wrapper}>
               <Avatar src={userPng} />&nbsp;
