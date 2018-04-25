@@ -1,4 +1,6 @@
-"compilerOptions": {
-  "experimentalDecorators": true,
-  "allowJs": true
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowJs": true
+  }
 }

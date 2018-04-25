@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.scss'
+import PropTypes from 'prop-types'
 import { Tabs, Button, Layout, Dropdown, Menu, Icon } from 'antd';
 const { Content } = Layout;
 const TabPane = Tabs.TabPane;
@@ -10,24 +11,39 @@ class AppMain extends Component {
     super(props);
     this.newTabIndex = 0;
     this.state = {
-      activeKey: 'tab/dashboard/dashboard',
-      activeTitle: '',
+      activeKey: 'tab/dashboard',
       panes: [
         {
           title: <span>DashBoard</span>,
           content: <DashBoard />,
-          key: 'tab/dashboard/dashboard',
+          key: 'dashboard',
           closable: false
         }
       ]
-    };
+    }
   }
-
+  componentWillMount() {
+    let path = this.props.location.pathname
+    path = path.replace('/home/', '')
+    this.addTab(path)
+  }
   onChange(activeKey) {
     this.setState({ activeKey });
+    this.props.adjustSelectedMenu(activeKey)
   }
   onEdit(targetKey, action) {
     this[action](targetKey);
+  }
+  addTab(path) {
+    this.setState({
+      activeKey: path,
+      panes: this.state.panes.concat([{
+        title: <span>{path}</span>,
+        content: <DashBoard />,
+        key: path,
+        closable: true
+      }])
+    })
   }
   add() {
     const panes = this.state.panes;
@@ -46,6 +62,7 @@ class AppMain extends Component {
     const panes = this.state.panes.filter(pane => pane.key !== targetKey);
     if (lastIndex >= 0 && activeKey === targetKey) {
       activeKey = panes[lastIndex].key;
+      this.props.adjustSelectedMenu(panes[lastIndex].key)
     }
     this.setState({ panes, activeKey });
   }
@@ -86,6 +103,11 @@ class AppMain extends Component {
       </Content>
     );
   }
+}
+
+AppMain.propTypes = {
+  location: PropTypes.object.isRequired,
+  adjustSelectedMenu: PropTypes.func.isRequired
 }
 
 export default AppMain;
