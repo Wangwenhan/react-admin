@@ -13,7 +13,7 @@ class IconSvg extends Component {
   render() {
     const iconName = `#icon-${this.props.iconClass}`
     return (
-      <svg className="svg-icon" aria-hidden="true">
+      <svg className={`svg-icon ${this.props.className}`} aria-hidden="true">
         <use xlinkHref={iconName}></use>
       </svg >
     )
@@ -21,7 +21,8 @@ class IconSvg extends Component {
 }
 
 IconSvg.propTypes = {
-  iconClass: PropTypes.string.isRequired
+  iconClass: PropTypes.string.isRequired,
+  className: PropTypes.string
 }
 
 export default IconSvg

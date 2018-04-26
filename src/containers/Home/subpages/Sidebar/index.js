@@ -87,7 +87,7 @@ class Sidebar extends Component {
       if (!item.name) {
         return null
       }
-      let icon = <IconSvg iconClass={item.icon} className={styles.sidebar_icon} />
+      let icon = <IconSvg iconClass={item.icon} className="anticon anticon-desktop" />
       if (item.children && !_.isEmpty(item.children)) {
         return item.hideInMenu ? null :
           (
@@ -121,7 +121,7 @@ class Sidebar extends Component {
     this.setState({
       currentMenu: [key]
     })
-    this.props.addTab(key)
+    // this.props.addTab(key)
   }
   adjustSelectedMenu(path) {
     this.generateCurrentMenuAndOpenKeysBasePath(path)

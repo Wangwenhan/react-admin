@@ -23,7 +23,8 @@ class Home extends Component {
     this.AppMainElement = React.createRef()
   }
   componentWillMount() {
-    this.menuData = this.formatMenuData(menuData)
+    this.sideBarMenuData = this.formatSideBarMenuData(menuData)
+    this.appMainMenuData = this.formatAppMainMenuData(this.sideBarMenuData)
     // request interceptor
     service.interceptors.request.use(config => {
       // 此处为请求拦截器 可以添加诸如token的相关逻辑
@@ -66,13 +67,13 @@ class Home extends Component {
       this.props.getUserInfo()
     }
   }
-  formatMenuData(menuData, parentPath = '') {
+  formatSideBarMenuData(menuData, parentPath = '') {
     return menuData.map(item => {
       if (item.children) {
         return {
           ...item,
           path: `${parentPath + item.path}`,
-          children: this.formatMenuData(item.children, `${parentPath + item.path}/`)
+          children: this.formatSideBarMenuData(item.children, `${parentPath + item.path}/`)
         }
       }
       return {
@@ -80,6 +81,17 @@ class Home extends Component {
         path: `${parentPath + item.path}`
       }
     })
+  }
+  formatAppMainMenuData(menuData) {
+    let allMenuData = {}
+    menuData.forEach(item => {
+      if (_.isEmpty(item.children)) {
+        allMenuData[item.path] = item
+      } else {
+        allMenuData = { ...allMenuData, ...this.formatAppMainMenuData(item.children) }
+      }
+    })
+    return allMenuData
   }
   toggle() {
     // 菜单收缩状态存入storage
@@ -104,10 +116,10 @@ class Home extends Component {
     }
     return (
       <Layout className={styles.home_wrapper}>
-        <Sidebar ref={this.SidebarElement} collapsed={this.props.collapsed} menuData={this.menuData} addTab={this.addTab.bind(this)} location={this.props.location}></Sidebar>
+        <Sidebar ref={this.SidebarElement} collapsed={this.props.collapsed} menuData={this.sideBarMenuData} addTab={this.addTab.bind(this)} location={this.props.location}></Sidebar>
         <Layout className={styles.work_space}>
           <Navbar collapsed={this.props.collapsed} userInfo={this.props.userInfo} toggle={this.toggle.bind(this)}></Navbar>
-          <AppMain ref={this.AppMainElement} location={this.props.location} adjustSelectedMenu={this.adjustSelectedMenu.bind(this)}></AppMain>
+          <AppMain ref={this.AppMainElement} location={this.props.location} history={this.props.history} adjustSelectedMenu={this.adjustSelectedMenu.bind(this)} menuData={this.appMainMenuData}></AppMain>
         </Layout>
       </Layout>
     );

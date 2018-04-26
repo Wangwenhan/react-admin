@@ -3,11 +3,14 @@
     height: 100vh;
     display: flex;
     justify-content: space-around;
+    overflow: hidden;
     .wscn_http404 {
-        padding-top: 20vh;
+        margin-top: -20vh;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         .pic_404 {
             position: relative;
-            float: left;
             width: 600px;
             overflow: hidden;
             &_parent {
@@ -118,7 +121,6 @@
         }
         .bullshit {
             position: relative;
-            float: left;
             width: 300px;
             overflow: hidden;
             &_oops {

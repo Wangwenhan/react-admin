@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import { Tabs, Button, Layout, Dropdown, Menu, Icon } from 'antd';
 const { Content } = Layout;
 const TabPane = Tabs.TabPane;
-import DashBoard from '../../../DashBoard'
+import IconSvg from 'components/IconSvg'
+import NotFound from 'containers/404'
 
 class AppMain extends Component {
   constructor(props) {
@@ -12,40 +13,82 @@ class AppMain extends Component {
     this.newTabIndex = 0;
     this.state = {
       activeKey: 'tab/dashboard',
-      panes: [
-        {
-          title: <span>DashBoard</span>,
-          content: <DashBoard />,
-          key: 'dashboard',
-          closable: false
-        }
-      ]
+      panes: []
     }
   }
   componentWillMount() {
+    this.addTab('dashboard')
+    this.handRouterChangeFromPath(true)
+  }
+  componentWillReceiveProps() {
+    setTimeout(() => {
+      this.handRouterChangeFromPath()
+    }, 0)
+  }
+  handRouterChangeFromPath(isInit) {
     let path = this.props.location.pathname
-    path = path.replace('/home/', '')
-    this.addTab(path)
+    path = path.replace('/home', '')
+    if (path === '') {
+      return
+    }
+    path = path.slice(1)
+    if (isInit) {
+      setTimeout(() => {
+        this.addTab(path)
+      }, 0)
+    } else {
+      this.addTab(path)
+    }
   }
   onChange(activeKey) {
-    this.setState({ activeKey });
+    this.setState({ activeKey })
     this.props.adjustSelectedMenu(activeKey)
+    this.props.history.replace(`/home/${activeKey}`)
   }
   onEdit(targetKey, action) {
-    this[action](targetKey);
+    this[action](targetKey)
   }
   addTab(path) {
+    if (this.state.panes.findIndex(item => {
+      return item.key === path
+    }) > -1) {
+      if (this.state.activeKey === path) {
+        return
+      }
+      this.setState({
+        activeKey: path
+      })
+      return
+    }
+    let Content
+    try {
+      Content = require(`./../../../Tab/${path}`).default // eslint-disable-line
+      Content = <Content />
+    } catch (error) {
+      Content = NotFound
+      Content = <Content style={{ height: 'calc( 100vh - 140px )' }} shouldHideReturnHomeBtn={true} />
+    }
     this.setState({
       activeKey: path,
       panes: this.state.panes.concat([{
-        title: <span>{path}</span>,
-        content: <DashBoard />,
+        title: this.getTitle(path),
+        content: Content,
         key: path,
-        closable: true
+        closable: path === 'dashboard' ? false : true
       }])
     })
   }
+  getTitle(path) {
+    const menu = this.props.menuData[path]
+    if (menu) {
+      return (<span><IconSvg iconClass={this.props.menuData[path].icon} className={styles.tab_icon} />{this.props.menuData[path].name}</span>)
+    } else {
+      return (<span>{path}</span>)
+    }
+
+  }
   add() {
+    console.error('不应该走这个方法：add（）')
     const panes = this.state.panes;
     const activeKey = `newTab${this.newTabIndex++}`;
     panes.push({ title: 'New Tab', content: 'New Tab Pane', key: activeKey });
@@ -63,12 +106,29 @@ class AppMain extends Component {
     if (lastIndex >= 0 && activeKey === targetKey) {
       activeKey = panes[lastIndex].key;
       this.props.adjustSelectedMenu(panes[lastIndex].key)
+      this.props.history.replace(`/home/${activeKey}`)
     }
     this.setState({ panes, activeKey });
   }
+  handleMoreOptionClick({ key }) {
+    if (key === 'Tabs-CloseOthers') {
+      this.setState({
+        panes: this.state.panes.filter(item => {
+          return item.key === 'dashboard' || item.key === this.state.activeKey
+        })
+      })
+    } else if (key === 'Tabs-CloseAll') {
+      this.setState({
+        panes: this.state.panes.filter(item => {
+          return item.key === 'dashboard'
+        }),
+        activeKey: 'dashboard'
+      })
+    }
+  }
   render() {
     const menu = (
-      <Menu>
+      <Menu onClick={this.handleMoreOptionClick.bind(this)}>
         <Menu.Item key='Tabs-CloseOthers'>关闭其他</Menu.Item>
         <Menu.Item key='Tabs-CloseAll'>关闭所有</Menu.Item>
       </Menu>
@@ -107,7 +167,9 @@ class AppMain extends Component {
 
 AppMain.propTypes = {
   location: PropTypes.object.isRequired,
-  adjustSelectedMenu: PropTypes.func.isRequired
+  history: PropTypes.object.isRequired,
+  adjustSelectedMenu: PropTypes.func.isRequired,
+  menuData: PropTypes.object.isRequired
 }
 
 export default AppMain;
