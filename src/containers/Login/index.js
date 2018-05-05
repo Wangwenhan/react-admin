@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import styles from './index.scss'
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
 import { Link } from "react-router-dom";
-import queryString from 'query-string'
+import queryString from 'qs'
 const FormItem = Form.Item;
 import logoPng from './../../assets/login/logo.png'
 import { loginSystem } from 'api/user'
@@ -37,7 +37,7 @@ class NormalLoginForm extends Component {
           // 登录成功 设置用户信息
           this.props.setUserInfo(res.data)
           // 接收跳转到login时携带的的redirect参数 并在登录成功后进行跳转
-          const search = queryString.parse(this.props.location.search)
+          const search = queryString.parse(this.props.location.search.slice(1))
           const redirect = decodeURIComponent(search.redirect || '/')
           this.props.history.push(redirect)
         }).catch(err => {

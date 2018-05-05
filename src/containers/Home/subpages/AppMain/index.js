@@ -29,6 +29,7 @@ class AppMain extends Component {
     let path = this.props.location.pathname
     path = path.replace('/home', '')
     if (path === '') {
+      this.props.history.replace(`/home/dashboard`)
       return
     }
     path = path.slice(1)
@@ -43,7 +44,7 @@ class AppMain extends Component {
   onChange(activeKey) {
     this.setState({ activeKey })
     this.props.adjustSelectedMenu(activeKey)
-    this.props.history.replace(`/home/${activeKey}`)
+    this.props.history.push(`/home/${activeKey}`)
   }
   onEdit(targetKey, action) {
     this[action](targetKey)
@@ -106,7 +107,7 @@ class AppMain extends Component {
     if (lastIndex >= 0 && activeKey === targetKey) {
       activeKey = panes[lastIndex].key;
       this.props.adjustSelectedMenu(panes[lastIndex].key)
-      this.props.history.replace(`/home/${activeKey}`)
+      this.props.history.push(`/home/${activeKey}`)
     }
     this.setState({ panes, activeKey });
   }
