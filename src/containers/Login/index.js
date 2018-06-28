@@ -2,11 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import styles from './index.scss'
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
-import { Link } from "react-router-dom";
+import { Form, Icon, Input, Button, Checkbox } from 'antd'
+import { Link } from "react-router-dom"
 import queryString from 'qs'
-const FormItem = Form.Item;
-import logoPng from './../../assets/login/logo.png'
+const FormItem = Form.Item
+import logoPng from 'assets/login/login_logo.png'
 import { loginSystem } from 'api/user'
 import { setUserInfo as setUserInfoFromAction, clearUserInfo as clearUserInfoFromAction } from './../../actions/user'
 
@@ -26,16 +26,16 @@ class NormalLoginForm extends Component {
         })
         // 采用cookie或者token需自己适配
         const formData = new FormData()
-        const reg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
-        if (reg.test(values.username)) {
-          formData.append('email', values.username)
-        } else {
-          formData.append('username', values.username)
-        }
+        // const reg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/
+        // if (reg.test(values.username)) {
+        //   formData.append('email', values.username)
+        // } else {
+        formData.append('username', values.username)
+        // }
         formData.append('password', values.password)
-        loginSystem(formData).then(res => {
+        loginSystem(formData).then(() => {
           // 登录成功 设置用户信息
-          this.props.setUserInfo(res.data)
+          // this.props.setUserInfo(res.data)
           // 接收跳转到login时携带的的redirect参数 并在登录成功后进行跳转
           const search = queryString.parse(this.props.location.search.slice(1))
           const redirect = decodeURIComponent(search.redirect || '/')
@@ -44,11 +44,10 @@ class NormalLoginForm extends Component {
           this.setState({
             iconLoading: false
           })
-          // 登录失败 请客用户信息（有可能用户在登录状态下重新登录其他账号）
+          // 登录失败 清空用户信息（有可能用户在登录状态下重新登录其他账号）
           this.props.clearUserInfo()
           console.error(err.message)
         })
-        console.log('Received values of form: ', values);
       }
     });
   }
@@ -59,18 +58,18 @@ class NormalLoginForm extends Component {
         <div className={styles.login_form_content}>
           <Form onSubmit={this.handleSubmit.bind(this)} className={styles.login_form}>
             <FormItem>
-              {getFieldDecorator('userName', {
+              {getFieldDecorator('username', {
                 rules: [{ required: true, message: '请输入用户名!' }],
               })(
                 <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="用户名" />
-              )}
+                )}
             </FormItem>
             <FormItem>
               {getFieldDecorator('password', {
                 rules: [{ required: true, message: '请输入密码!' }],
               })(
                 <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="密码" />
-              )}
+                )}
             </FormItem>
             <FormItem>
               {getFieldDecorator('remember', {
@@ -78,7 +77,7 @@ class NormalLoginForm extends Component {
                 initialValue: true,
               })(
                 <Checkbox>记住我</Checkbox>
-              )}
+                )}
               <Link to="/modify" className={styles.login_form_forgot}>
                 忘记密码
                </Link>
@@ -89,10 +88,10 @@ class NormalLoginForm extends Component {
           </Form>
         </div>
         <div className={styles.logo_content}>
-          <img src={logoPng} alt="logo" width="200px" />
+          <img src={logoPng} alt="logo" />
         </div>
         <div className={styles.copy_right}>
-          <span>powered by wwh</span>
+          <span>React Admin©2018</span>
         </div>
       </div>
     );

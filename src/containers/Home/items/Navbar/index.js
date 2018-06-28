@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import styles from './index.scss'
 import { Layout, Icon, Menu, Dropdown, Avatar } from 'antd';
 const { Header } = Layout;
-import userPng from 'assets/user/user.jpeg'
 import { fedLogout as fedLogoutFromAction } from 'actions/user'
 import ScreenFull from './../../../../components/ScreenFull'
 
-class Navbar extends Component {
+class Navbar extends PureComponent {
   constructor(props) {
     super(props)
   }
@@ -20,33 +19,28 @@ class Navbar extends Component {
         break;
       case 'logout':
         this.props.fedLogout()
-        this.props.history.push(`/login?redirect=${encodeURIComponent(this.props.location.pathname)}`)
+        this.props.history.push(`/login`)
         break;
     }
   }
   render() {
     const menu = (
       <Menu className={styles.menu} onClick={this.onMenuClick.bind(this)}>
-        <Menu.Item key="modify"><Icon type="key" />&nbsp;修改密码</Menu.Item>
-        <Menu.Divider />
+        {/*<Menu.Item key="modify"><Icon type="key" />&nbsp;修改密码</Menu.Item>
+        <Menu.Divider />*/}
         <Menu.Item key="logout"><Icon type="logout" />&nbsp;退出登录</Menu.Item>
       </Menu>
     )
     return (
       <Header className={styles.navbar_container}>
-        <Icon
-          className={styles.trigger}
-          type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
-          onClick={this.props.toggle}
-        />
         <div className={styles.right_option}>
           <ScreenFull/>
           <Dropdown overlay={menu}>
-            <a className={styles.avatar_wrapper}>
-              <Avatar src={userPng} />&nbsp;
-              <span>{this.props.userInfo.name}</span>&nbsp;
+            <div className={styles.avatar_wrapper}>
+              <Avatar style={{ backgroundColor: 'lightskyblue' }} icon="user" />&nbsp;
+              <span>{this.props.userInfo.username}</span>&nbsp;
               <Icon type="down" />
-            </a>
+            </div>
           </Dropdown>
         </div>
       </Header>
@@ -55,8 +49,6 @@ class Navbar extends Component {
 }
 
 Navbar.propTypes = {
-  collapsed: PropTypes.bool.isRequired,
-  toggle: PropTypes.func.isRequired,
   userInfo: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,

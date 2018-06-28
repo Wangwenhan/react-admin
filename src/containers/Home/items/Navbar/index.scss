@@ -1,13 +1,15 @@
 .navbar_container {
     background: #fff;
     padding: 0;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 12px 0 0;
-    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
+    padding: 0;
+    height: 39px;
+    line-height: 39px;
+    position: absolute;
+    top: 0;
+    right: 0;
     .trigger {
         font-size: 18px;
-        line-height: 64px;
+        line-height: 39px;
         padding: 0 24px;
         cursor: pointer;
         transition: all .3s;
@@ -18,7 +20,7 @@
     }
     .right_option {
         font-size: 14px;
-        line-height: 64px;
+        line-height: 39px;
         display: flex;
         align-items: center;
         .avatar_wrapper {
@@ -26,7 +28,7 @@
             position: relative;
             display: flex;
             align-items: center;
-            height: 64px;
+            height: 39px;
             padding: 0 12px;
             &:hover,
             &:global(.ant-popover-open) {

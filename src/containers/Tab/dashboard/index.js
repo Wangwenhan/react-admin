@@ -1,15 +1,18 @@
-import React, { Component } from 'react'
-// import styles from './index.scss'
-import IconSvg from 'components/IconSvg'
+import React, { Component } from 'react';
+import styles from "./index.scss";
+import { hot } from 'react-hot-loader'
 
-class DashBoard extends Component {
-  render() {
-    return (
-      <div>
-        dashboard
-        <IconSvg iconClass="chart"/>
-      </div>
-    )
-  }
+class Index extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div>
+                建设中
+            </div>
+        );
+    }
 }
-export default DashBoard
+export default hot(module)(Index);

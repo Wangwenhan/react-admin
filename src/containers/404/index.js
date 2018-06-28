@@ -20,7 +20,7 @@ class NoMatch extends Component {
           <div className={styles.bullshit}>
             <div className={styles.bullshit_oops}>404!</div>
             <div className={styles.bullshit_info}>版权所有
-                    <a href='/' target='_blank'>wwh</a>
+                    <a href='http://www.htsc.com.cn' target='_blank' rel="noopener noreferrer">React Admin</a>
             </div>
             <div className={styles.bullshit_headline}>{message}</div>
             {!this.props.shouldHideReturnHomeBtn && (

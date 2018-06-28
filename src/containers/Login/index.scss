@@ -31,6 +31,11 @@
         auto,
         auto,
         0);
+        :global(img) {
+            width: 240px;
+            margin-left: 28px;
+            margin-top: 20px;
+        }
     }
     .copy_right {
         @include position(fixed,

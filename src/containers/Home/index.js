@@ -1,37 +1,39 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Layout, Spin } from 'antd';
+import { Layout, Spin, Modal } from 'antd';
 import styles from './index.scss'
-import Sidebar from './subpages/Sidebar'
-import AppMain from './subpages/AppMain'
-import Navbar from './subpages/Navbar';
+import Sidebar from './items/Sidebar'
+import AppMain from './items/AppMain'
+import Navbar from './items/Navbar';
 import { getLocalStore, setLocalStore } from 'utils/storage'
 import { toggleMenuCollapsed as toggleMenuCollapsedFromAction } from 'actions/app'
 import { getUserInfo as getUserInfoFromAction, clearUserInfo as clearUserInfoFromAction } from 'actions/user'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
-import service from './../../utils/ajax'
-// 假数据 可根据需求调整为服务端获取或静态配置
-import { menuData } from './../../config/menuMock'
+import service from 'utils/ajax'
 
 class Home extends Component {
   constructor(props) {
     super(props)
+    this.registerAxiosInterceptors()
     const isMenuCollapsed = getLocalStore('react_admin_menu_collapsed') === 'true'
     this.props.toggleMenuCollapsed(isMenuCollapsed)
     this.SidebarElement = React.createRef()
     this.AppMainElement = React.createRef()
+    if (_.isEmpty(this.props.userInfo)) {
+      this.props.getUserInfo()
+    }
+    this.state = {
+      collapsed: isMenuCollapsed
+    }
   }
-  componentWillMount() {
-    this.sideBarMenuData = this.formatSideBarMenuData(menuData)
-    this.appMainMenuData = this.formatAppMainMenuData(this.sideBarMenuData)
+  
+  registerAxiosInterceptors() {
     // request interceptor
     service.interceptors.request.use(config => {
-      // 此处为请求拦截器 可以添加诸如token的相关逻辑
-      // if (store.getters.loginState) {
-      //   const token = getSessionStore('token') || getLocalStore('token')
-      //   config.headers.Authorization = token || ''
-      // }
+      if (config.url.indexOf('/api/v1/graph') > -1) {
+        config.headers.apiToken = "{\"Sig\":\"default-token-used-in-server-side\",\"Name\":\"csw\"}"
+      }
       return config
     }, error => {
       // Do something with request error
@@ -41,7 +43,13 @@ class Home extends Component {
 
     // respone interceptor
     service.interceptors.response.use(
-      response => response,
+      response => {
+        if (response.headers['content-type'] === 'text/html' && response.headers['content-length']) {
+          window.location.href = 'http://eip.htsc.com.cn'
+          return
+        }
+        return response
+      },
       error => {
         console.log('err' + error)// for debug
         // Message({
@@ -55,48 +63,37 @@ class Home extends Component {
               // removeSessionStore('token')
               // removeLocalStore('token')
               this.props.clearUserInfo()
+              if (window.location.href.indexOf('eip.htsc.com.cn') > 0) {
+                // OA的403
+                window.location.href = 'http://eip.htsc.com.cn'
+                return
+              }
               this.props.history.push(`/login?redirect=${encodeURIComponent(this.props.location.pathname)}`)
               break;
             default:
+              if (error.response.headers['content-type'] === 'text/html' && error.response.headers['content-length']) {
+                window.location.href = 'http://eip.htsc.com.cn'
+                return
+              }
               console.log('error %S', error.response.status)
+              Modal.error({
+                title: error.response.data.error,
+                content: error.response.data.message
+              })
           }
         }
         return Promise.reject(error)
       })
-    if (_.isEmpty(this.props.userInfo)) {
-      this.props.getUserInfo()
-    }
-  }
-  formatSideBarMenuData(menuData, parentPath = '') {
-    return menuData.map(item => {
-      if (item.children) {
-        return {
-          ...item,
-          path: `${parentPath + item.path}`,
-          children: this.formatSideBarMenuData(item.children, `${parentPath + item.path}/`)
-        }
-      }
-      return {
-        ...item,
-        path: `${parentPath + item.path}`
-      }
-    })
-  }
-  formatAppMainMenuData(menuData) {
-    let allMenuData = {}
-    menuData.forEach(item => {
-      if (_.isEmpty(item.children)) {
-        allMenuData[item.path] = item
-      } else {
-        allMenuData = { ...allMenuData, ...this.formatAppMainMenuData(item.children) }
-      }
-    })
-    return allMenuData
   }
   toggle() {
+    this.setState((prevState => {
+      return {
+        collapsed: !prevState.collapsed
+      }
+    }))
+    this.props.toggleMenuCollapsed(!this.state.collapsed)
     // 菜单收缩状态存入storage
-    setLocalStore('react_admin_menu_collapsed', !this.props.collapsed)
-    this.props.toggleMenuCollapsed(!this.props.collapsed)
+    setLocalStore('react_admin_menu_collapsed', !this.state.collapsed)
   }
   addTab(path) {
     // 借助ref实现兄弟组件通信
@@ -107,19 +104,35 @@ class Home extends Component {
     this.SidebarElement.current.adjustSelectedMenu(path)
   }
   render() {
-    if (_.isEmpty(this.props.userInfo)) {
+    if (_.isEmpty(this.props.userInfo) || _.isEmpty(this.props.sideBarMenuData) || _.isEmpty(this.props.appMainMenuData)) {
       return (
         <div style={{ height: '100vh', display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
           <Spin size="large" />
         </div>
       )
     }
+    const { collapsed } = this.state
     return (
       <Layout className={styles.home_wrapper}>
-        <Sidebar ref={this.SidebarElement} collapsed={this.props.collapsed} menuData={this.sideBarMenuData} addTab={this.addTab.bind(this)} location={this.props.location}></Sidebar>
+        <Sidebar
+          ref={this.SidebarElement}
+          collapsed={collapsed}
+          menuData={this.props.sideBarMenuData}
+          addTab={this.addTab.bind(this)}
+          location={this.props.location}
+        ></Sidebar>
         <Layout className={styles.work_space}>
-          <Navbar collapsed={this.props.collapsed} userInfo={this.props.userInfo} toggle={this.toggle.bind(this)}></Navbar>
-          <AppMain ref={this.AppMainElement} location={this.props.location} history={this.props.history} adjustSelectedMenu={this.adjustSelectedMenu.bind(this)} menuData={this.appMainMenuData}></AppMain>
+          <AppMain ref={this.AppMainElement}
+            collapsed={collapsed}
+            toggle={this.toggle.bind(this)}
+            location={this.props.location}
+            history={this.props.history}
+            adjustSelectedMenu={this.adjustSelectedMenu.bind(this)}
+            menuData={this.props.appMainMenuData}
+          ></AppMain>
+          <Navbar
+            userInfo={this.props.userInfo}
+          ></Navbar>
         </Layout>
       </Layout>
     );
@@ -128,8 +141,9 @@ class Home extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    collapsed: state.app.isMenuCollapsed,
-    userInfo: state.user.userInfo
+    userInfo: state.user.userInfo,
+    sideBarMenuData: state.user.sideBarMenuData,
+    appMainMenuData: state.user.appMainMenuData
   }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -147,13 +161,14 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 Home.propTypes = {
-  collapsed: PropTypes.bool.isRequired,
   userInfo: PropTypes.object.isRequired,
   toggleMenuCollapsed: PropTypes.func.isRequired,
   clearUserInfo: PropTypes.func.isRequired,
   getUserInfo: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
-  location: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
+  sideBarMenuData: PropTypes.array.isRequired,
+  appMainMenuData: PropTypes.object.isRequired
 }
 
 const connectHome = connect(

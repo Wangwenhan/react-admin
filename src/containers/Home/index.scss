@@ -1,7 +1,8 @@
 .home_wrapper {
-    min-height: 500px;
-    height: 100vh;
+    min-height: 100vh;
     .work_space {
+        position: relative;
+        min-height: 100vh;
         &:global(.ant-layout) {
             background: #fff;
         }
